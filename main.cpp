@@ -108,18 +108,27 @@ Matrix4x4 Multiply(const Matrix4x4& m1, const Matrix4x4& m2) {
 	}
 	return matrixMultiply;
 }
+// X, Y, Z軸の回転行列を合成する関数
+Matrix4x4 MakeRotateXYZMatrix(const Vector3& rotate) {
+	// 各軸の回転行列を作成
+	Matrix4x4 rotateXMatrix = MakeRotateXMatrix(rotate.x);
+	Matrix4x4 rotateYMatrix = MakeRotateYMatrix(rotate.y);
+	Matrix4x4 rotateZMatrix = MakeRotateZMatrix(rotate.z);
+
+	// 回転行列を合成 (X → Y → Z の順)
+	Matrix4x4 rotateXYZMatrix = Multiply(rotateXMatrix, Multiply(rotateYMatrix, rotateZMatrix));
+
+	return rotateXYZMatrix;
+}
+
 Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Vector3& rotate, const Vector3& translate) {
 	// スケール行列
 	Matrix4x4 scaleMatrix = MakeScaleMatrix(scale);
 
-	// 各軸の回転行列を作成
-	Matrix4x4 rotationXMatrix = MakeRotateXMatrix(rotate.x);
-	Matrix4x4 rotationYMatrix = MakeRotateYMatrix(rotate.y);
-	Matrix4x4 rotationZMatrix = MakeRotateZMatrix(rotate.z);
+	//回転行列
+	Matrix4x4 rotateMatrix = MakeRotateXYZMatrix(rotate);
 
-	// 回転行列を合成
-	Matrix4x4 rotateMatrix = Multiply(Multiply(rotationZMatrix, rotationYMatrix), rotationXMatrix);
-
+	
 	// 平行移動行列
 	Matrix4x4 translationMatrix = MakeTranslationMatrix(translate);
 
