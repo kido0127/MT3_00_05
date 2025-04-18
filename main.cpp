@@ -117,7 +117,7 @@ Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Vector3& rotate, const Ve
 	Matrix4x4 rotationYMatrix = MakeRotateYMatrix(rotate.y);
 	Matrix4x4 rotationZMatrix = MakeRotateZMatrix(rotate.z);
 
-	// 回転行列を合成 (Z → Y → X の順)
+	// 回転行列を合成
 	Matrix4x4 rotateMatrix = Multiply(Multiply(rotationZMatrix, rotationYMatrix), rotationXMatrix);
 
 	// 平行移動行列
